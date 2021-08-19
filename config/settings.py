@@ -10,6 +10,7 @@ For the full list of settings and their values, see
 https://docs.djangoproject.com/en/3.2/ref/settings/
 """
 import os
+from datetime import timedelta
 from pathlib import Path
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
@@ -39,8 +40,10 @@ INSTALLED_APPS = [
     "rest_framework",
     "drf_yasg",
     "debug_toolbar",
-    #local
-    "home.apps.HomeConfig"
+    "rest_framework_simplejwt.token_blacklist",
+    # local
+    "home.apps.HomeConfig",
+    "user.apps.UserConfig"
 ]
 
 MIDDLEWARE = [
@@ -123,6 +126,7 @@ USE_TZ = True
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/3.2/howto/static-files/
 
+AUTH_USER_MODEL = "user.User"
 
 STATIC_URL = "/static/"
 
@@ -134,5 +138,21 @@ MEDIA_ROOT = os.path.join(BASE_DIR, "media/")
 DJANGO_SETTINGS_MODULE = "config.settings"
 DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 
+REST_FRAMEWORK = {
+    "DEFAULT_RENDERER_CLASSES": [
+        "rest_framework.renderers.JSONRenderer",
+    ],
+    'DEFAULT_AUTHENTICATION_CLASSES': (
+        'rest_framework_simplejwt.authentication.JWTAuthentication',
+    ),
+    "DEFAULT_PERMISSION_CLASSES": [
+        "rest_framework.permissions.AllowAny",
+    ],
+}
+
+SIMPLE_JWT = {
+    'ACCESS_TOKEN_LIFETIME': timedelta(minutes=20),
+    'USER_AUTHENTICATION_RULE': 'user.validators.custom_user_authentication_rule',
+}
 
 DEBUG_TOOLBAR_CONFIG = {"SHOW_TOOLBAR_CALLBACK": lambda request: DEBUG}

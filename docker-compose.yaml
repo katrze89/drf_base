@@ -1,0 +1,33 @@
+version: '3.8'
+
+services:
+  backend:
+    build:
+      context: .
+      dockerfile: "Dockerfile"
+    command: sh -c "
+      python manage.py makemigrations &&
+      python manage.py migrate &&
+      python manage.py runserver 0.0.0.0:1666"
+    volumes:
+      - .:/usr/src/app/
+      - media:/usr/src/app/media
+    ports:
+      - 1666:1666
+    env_file:
+      - ./envs/.env.dev
+    depends_on:
+      - db
+    restart: "on-failure"
+
+  db:
+    image: library/postgres:13-alpine
+    volumes:
+      - postgres_data:/var/lib/postgresql/data/
+    env_file:
+      - ./envs/.env.dev.db
+
+
+volumes:
+  postgres_data:
+  media:

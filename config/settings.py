@@ -39,6 +39,8 @@ INSTALLED_APPS = [
     "rest_framework",
     "drf_yasg",
     "debug_toolbar",
+    #local
+    "home.apps.HomeConfig"
 ]
 
 MIDDLEWARE = [
@@ -131,3 +133,6 @@ MEDIA_ROOT = os.path.join(BASE_DIR, "media/")
 # https://docs.djangoproject.com/en/3.2/ref/settings/#default-auto-field
 DJANGO_SETTINGS_MODULE = "config.settings"
 DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
+
+
+DEBUG_TOOLBAR_CONFIG = {"SHOW_TOOLBAR_CALLBACK": lambda request: DEBUG}
